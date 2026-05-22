@@ -7,13 +7,77 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="app-shell">
+    <section class="auth-screen" id="authScreen" aria-label="Acceso a Alta Daily">
+      <div class="auth-card">
+        <div class="auth-intro">
+          <div class="brand auth-brand">
+            <div class="brand-mark" aria-hidden="true">A</div>
+            <div>
+              <p>Alta Daily</p>
+              <span>Tu armario, elevado cada dia</span>
+            </div>
+          </div>
+
+          <div>
+            <span class="eyebrow">MVP 01</span>
+            <h1>Empieza tu armario inteligente.</h1>
+            <p class="auth-copy">Crea una cuenta para guardar prendas, looks y tu progreso de estilo en un solo lugar.</p>
+          </div>
+
+          <div class="auth-highlights" aria-label="Beneficios principales">
+            <span>Armario visual</span>
+            <span>Looks guardados</span>
+            <span>Historial simple</span>
+          </div>
+        </div>
+
+        <div class="auth-panel">
+          <div class="auth-tabs" role="tablist" aria-label="Acciones de acceso">
+            <button class="active" id="showRegisterButton" type="button">Registro</button>
+            <button id="showLoginButton" type="button">Login</button>
+          </div>
+
+          <form class="auth-form" id="registerForm">
+            <label>
+              Nombre
+              <input id="registerName" type="text" autocomplete="name" placeholder="Sofia" required />
+            </label>
+            <label>
+              Email
+              <input id="registerEmail" type="email" autocomplete="email" placeholder="sofia@email.com" required />
+            </label>
+            <label>
+              Contrasena
+              <input id="registerPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Minimo 6 caracteres" required />
+            </label>
+            <button type="submit">Crear mi cuenta</button>
+          </form>
+
+          <form class="auth-form hidden" id="loginForm">
+            <label>
+              Email
+              <input id="loginEmail" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              Contrasena
+              <input id="loginPassword" type="password" autocomplete="current-password" required />
+            </label>
+            <button type="submit">Entrar</button>
+          </form>
+
+          <button class="secondary auth-demo" id="demoAccessButton" type="button">Entrar con demo</button>
+          <p class="auth-message" id="authMessage" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="app-shell hidden" id="appShell">
       <aside class="sidebar" aria-label="Navegacion principal">
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">A</div>
           <div>
             <p>Alta Daily</p>
-            <span>Armario inteligente</span>
+            <span id="sidebarUserName">Armario inteligente</span>
           </div>
         </div>
 
@@ -31,6 +95,8 @@
             <div class="meter-fill" style="width: 24%"></div>
           </div>
         </div>
+
+        <button class="secondary logout-button" id="logoutButton" type="button">Cerrar sesion</button>
       </aside>
 
       <main class="main-content">
@@ -40,7 +106,7 @@
             <h1>Tu outfit diario, armado con lo que ya tienes.</h1>
           </div>
           <button class="icon-button" id="shuffleButton" type="button" aria-label="Generar otra combinacion" title="Generar otra combinacion">
-            <span aria-hidden="true">↻</span>
+            <span aria-hidden="true">&#8635;</span>
           </button>
         </section>
 
