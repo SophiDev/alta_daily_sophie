@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: alta_daily_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-alta_daily}
+      POSTGRES_USER: ${POSTGRES_USER:-alta_daily_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-alta_daily_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - alta_daily_pgdata:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/001_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-alta_daily_user} -d ${POSTGRES_DB:-alta_daily}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  alta_daily_pgdata:
