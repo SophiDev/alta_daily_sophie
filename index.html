@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alta Daily</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegacion principal">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">A</div>
+          <div>
+            <p>Alta Daily</p>
+            <span>Armario inteligente</span>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Secciones">
+          <a href="#today" class="active">Hoy</a>
+          <a href="#closet">Armario</a>
+          <a href="#planner">Calendario</a>
+          <a href="#insights">Uso</a>
+        </nav>
+
+        <div class="closet-meter">
+          <span>Armario usado este mes</span>
+          <strong id="usageScore">24%</strong>
+          <div class="meter-track">
+            <div class="meter-fill" style="width: 24%"></div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <section class="topbar" aria-label="Resumen del dia">
+          <div>
+            <span class="eyebrow">Viernes, plan de estilo</span>
+            <h1>Tu outfit diario, armado con lo que ya tienes.</h1>
+          </div>
+          <button class="icon-button" id="shuffleButton" type="button" aria-label="Generar otra combinacion" title="Generar otra combinacion">
+            <span aria-hidden="true">↻</span>
+          </button>
+        </section>
+
+        <section class="dashboard-grid" id="today">
+          <article class="look-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Look recomendado</span>
+                <h2 id="lookTitle">Lista para el dia</h2>
+              </div>
+              <span class="confidence" id="confidenceScore">92%</span>
+            </div>
+
+            <div class="look-stage" id="lookStage" aria-live="polite"></div>
+
+            <div class="look-actions">
+              <button type="button" id="saveLookButton">Guardar en calendario</button>
+              <button type="button" class="secondary" id="markWornButton">Marcar como usado</button>
+            </div>
+          </article>
+
+          <article class="context-panel">
+            <div class="panel-heading compact">
+              <div>
+                <span class="eyebrow">Contexto</span>
+                <h2>Clima, agenda y mood</h2>
+              </div>
+            </div>
+
+            <form class="context-form" id="contextForm">
+              <label>
+                Clima
+                <select id="weatherInput">
+                  <option value="templado">Templado</option>
+                  <option value="calor">Calor</option>
+                  <option value="lluvia">Lluvia</option>
+                  <option value="frio">Frio</option>
+                </select>
+              </label>
+              <label>
+                Agenda
+                <select id="agendaInput">
+                  <option value="trabajo">Trabajo</option>
+                  <option value="casual">Casual</option>
+                  <option value="cena">Cena</option>
+                  <option value="evento">Evento</option>
+                </select>
+              </label>
+              <label>
+                Estilo
+                <select id="styleInput">
+                  <option value="minimal">Minimal</option>
+                  <option value="romantico">Romantico</option>
+                  <option value="urbano">Urbano</option>
+                  <option value="clasico">Clasico</option>
+                </select>
+              </label>
+            </form>
+
+            <div class="style-notes" id="styleNotes"></div>
+          </article>
+        </section>
+
+        <section class="workspace-grid">
+          <article class="closet-section" id="closet">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Armario digital</span>
+                <h2>Prendas cargadas</h2>
+              </div>
+              <label class="upload-button">
+                <input type="file" id="garmentUpload" accept="image/*" multiple />
+                Subir fotos
+              </label>
+            </div>
+            <div class="closet-grid" id="closetGrid"></div>
+          </article>
+
+          <article class="planner-section" id="planner">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Planificacion</span>
+                <h2>Semana de outfits</h2>
+              </div>
+            </div>
+            <div class="calendar-list" id="calendarList"></div>
+          </article>
+        </section>
+
+        <section class="insights-band" id="insights">
+          <div>
+            <span class="eyebrow">IA de rotacion</span>
+            <h2>Usa mas de tu armario sin pensarlo tanto.</h2>
+          </div>
+          <div class="insight-stats">
+            <div>
+              <strong id="itemCount">0</strong>
+              <span>prendas</span>
+            </div>
+            <div>
+              <strong id="rareCount">0</strong>
+              <span>poco usadas</span>
+            </div>
+            <div>
+              <strong id="savedCount">0</strong>
+              <span>looks guardados</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="garmentTemplate">
+      <article class="garment-card">
+        <div class="garment-image"></div>
+        <div class="garment-info">
+          <strong></strong>
+          <span></span>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
