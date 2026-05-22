@@ -84,9 +84,19 @@ const sampleGarments = [
 const state = {
   garments: JSON.parse(localStorage.getItem("alta-garments") || "null") || sampleGarments,
   savedLooks: JSON.parse(localStorage.getItem("alta-looks") || "[]"),
+  user: JSON.parse(localStorage.getItem("alta-user") || "null"),
   currentLook: [],
 };
 
+const authScreen = document.querySelector("#authScreen");
+const appShell = document.querySelector("#appShell");
+const registerForm = document.querySelector("#registerForm");
+const loginForm = document.querySelector("#loginForm");
+const showRegisterButton = document.querySelector("#showRegisterButton");
+const showLoginButton = document.querySelector("#showLoginButton");
+const demoAccessButton = document.querySelector("#demoAccessButton");
+const logoutButton = document.querySelector("#logoutButton");
+const authMessage = document.querySelector("#authMessage");
 const lookStage = document.querySelector("#lookStage");
 const closetGrid = document.querySelector("#closetGrid");
 const calendarList = document.querySelector("#calendarList");
@@ -94,11 +104,110 @@ const weatherInput = document.querySelector("#weatherInput");
 const agendaInput = document.querySelector("#agendaInput");
 const styleInput = document.querySelector("#styleInput");
 
+showRegisterButton.addEventListener("click", () => setAuthMode("register"));
+showLoginButton.addEventListener("click", () => setAuthMode("login"));
+registerForm.addEventListener("submit", registerUser);
+loginForm.addEventListener("submit", loginUser);
+demoAccessButton.addEventListener("click", enterDemo);
+logoutButton.addEventListener("click", logoutUser);
 document.querySelector("#contextForm").addEventListener("change", generateLook);
 document.querySelector("#shuffleButton").addEventListener("click", generateLook);
 document.querySelector("#saveLookButton").addEventListener("click", saveLook);
 document.querySelector("#markWornButton").addEventListener("click", markWorn);
 document.querySelector("#garmentUpload").addEventListener("change", uploadGarments);
+
+function setAuthMode(mode) {
+  const isRegister = mode === "register";
+  registerForm.classList.toggle("hidden", !isRegister);
+  loginForm.classList.toggle("hidden", isRegister);
+  showRegisterButton.classList.toggle("active", isRegister);
+  showLoginButton.classList.toggle("active", !isRegister);
+  authMessage.textContent = "";
+}
+
+function registerUser(event) {
+  event.preventDefault();
+  const name = document.querySelector("#registerName").value.trim();
+  const email = document.querySelector("#registerEmail").value.trim().toLowerCase();
+  const password = document.querySelector("#registerPassword").value;
+
+  if (!name || !email || password.length < 6) {
+    showAuthMessage("Completa nombre, email y una contrasena de minimo 6 caracteres.");
+    return;
+  }
+
+  state.user = {
+    id: crypto.randomUUID(),
+    name,
+    email,
+    password,
+    createdAt: new Date().toISOString(),
+  };
+
+  localStorage.setItem("alta-user", JSON.stringify(state.user));
+  localStorage.setItem("alta-session", "active");
+  showApp();
+}
+
+function loginUser(event) {
+  event.preventDefault();
+  const email = document.querySelector("#loginEmail").value.trim().toLowerCase();
+  const password = document.querySelector("#loginPassword").value;
+  const savedUser = JSON.parse(localStorage.getItem("alta-user") || "null");
+
+  if (!savedUser || savedUser.email !== email || savedUser.password !== password) {
+    showAuthMessage("No encontramos esa cuenta en este prototipo. Puedes registrarte o entrar con demo.");
+    return;
+  }
+
+  state.user = savedUser;
+  localStorage.setItem("alta-session", "active");
+  showApp();
+}
+
+function enterDemo() {
+  state.user = {
+    id: "demo-user",
+    name: "Sofia",
+    email: "demo@altadaily.app",
+    password: "demo123",
+    createdAt: new Date().toISOString(),
+  };
+
+  localStorage.setItem("alta-user", JSON.stringify(state.user));
+  localStorage.setItem("alta-session", "active");
+  showApp();
+}
+
+function logoutUser() {
+  localStorage.removeItem("alta-session");
+  appShell.classList.add("hidden");
+  authScreen.classList.remove("hidden");
+  setAuthMode("login");
+}
+
+function showApp() {
+  document.querySelector("#sidebarUserName").textContent = `Hola, ${state.user.name}`;
+  authScreen.classList.add("hidden");
+  appShell.classList.remove("hidden");
+  renderAll();
+}
+
+function showAuthMessage(message) {
+  authMessage.textContent = message;
+}
+
+function initAuth() {
+  const hasSession = localStorage.getItem("alta-session") === "active";
+  if (hasSession && state.user) {
+    showApp();
+    return;
+  }
+
+  authScreen.classList.remove("hidden");
+  appShell.classList.add("hidden");
+  setAuthMode("register");
+}
 
 function generateLook() {
   const context = {
@@ -304,4 +413,4 @@ function makeGarmentSvg(primary, accent, shape) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-renderAll();
+initAuth();
